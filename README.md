@@ -46,7 +46,7 @@ li,ul{list-style:none; padding:0; margin:0; }
 	-o-transform:rotate(90deg); /* Opera */
 }
 </pre>
-<strong>3. js</strong>
+<strong>3. js</strong><br/>
 <small>3.1 先引入以下3个js</small>
 <pre>
 jquery-1.8.3.js
