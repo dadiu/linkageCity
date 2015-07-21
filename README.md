@@ -1,5 +1,7 @@
 # linkageCity
 
+<h3>兼容性</h3>
+<p>IE7+</p>
 <h3>线上地址</h3>
 <p><a href="http://whj.fayfox.com/demo/plugIn.linkageCity/" target="_blank">戳这里</a></p>
 <h3>可传入参数</h3>
