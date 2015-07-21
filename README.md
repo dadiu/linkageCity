@@ -2,7 +2,7 @@
 
 <h3>可传入参数</h3>
 <pre>
-cityName : '浙江省|杭州市|滨江区',		  //默认 城市名 可选
+cityName : '浙江省|杭州市|滨江区',		//默认 城市名 可选
 cityCode : '12|965|971',				//默认 城市代码 可选
 p : '',									//方法传参 默认空 可选
 closeBoo : true, 						//是否出现关闭按钮 默认false 
@@ -56,11 +56,11 @@ jquery.linkageCity.min.js
 <small>3.2 最后运行js</small>
 <pre>
 $('#m_city').linkageCity({
-    cityName : '浙江省|杭州市|滨江区',		  //默认 城市名 可选
+    cityName : '浙江省|杭州市|滨江区',		//默认 城市名 可选
     cityCode : '12|965|971',				//默认 城市代码 可选
     p : '',									//方法传参 默认空 可选
     closeBoo : true, 						//是否出现关闭按钮 默认false 
-    callback : function(p){							//回调方法 默认null
+    callback : function(p){					//回调方法 默认null
 			console.log(this.p);
 		}
 	});
