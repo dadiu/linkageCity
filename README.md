@@ -2,9 +2,14 @@
 
 <h3>兼容性</h3>
 <p>IE7+</p>
+<h3>选择后的储存位置</h3>
+<ol>
+<li>储存省市的code值于".linkage_txt"标签的“data-code”属性中，以“|”连接，如“12|965|971”</li>
+<li>储存省市的文字于".linkage_txt"标签的“txt”中，以空格连接</li>
+</ol>
 <h3>线上地址</h3>
 <p><a href="http://whj.fayfox.com/demo/plugIn.linkageCity/" target="_blank">戳这里</a></p>
-<h3>可传入参数</h3>
+<h3>参数说明</h3>
 <pre>
 cityName : '浙江省|杭州市|滨江区',		//默认 城市名 可选
 cityCode : '12|965|971',				//默认 城市代码 可选
