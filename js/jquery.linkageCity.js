@@ -1,7 +1,7 @@
 (function($){
 	$.fn.linkageCity = function(options){
 
-		var defaluts = {
+		var defaults = {
 			cityName : '浙江省|杭州市|滨江区',	//默认 城市名
 			cityCode : '12|965|971',			//默认 城市代码
 			p : '',					//方法传参 默认空
@@ -9,7 +9,7 @@
 			callback : null			//回调方法 默认null
 		},
 
-		options = $.extend(defaluts, options),
+		options = $.extend(defaults, options),
 
 		objs = {
 			'bar' : $('<div>').addClass('m_linkage'),
