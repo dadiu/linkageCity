@@ -1,12 +1,31 @@
+/**
+ * @url     https://github.com/dadiu/linkageCity
+ * @data    2015.08.06
+ * @author  wuhaijing
+ * @mail    1004609378@qq.com
+ * @version V1.0.0
+ */
+/********************* 传参说明 *********************/
+/**
+ * 以下均为必填参数
+ * cityName : string		//城市名		默认'浙江省|杭州市|滨江区'
+ * cityCode : string		//城市代码	默认'12|965|971'
+ *
+ * 以下均为可选参数
+ * p : string			//方法传参			默认空
+ * closeBoo ：boolean	//是否出现关闭按钮 	默认false
+ * call ：function		//回调方法			默认null
+ */
+/******************** 开始 ********************/
 (function($){
 	$.fn.linkageCity = function(options){
 
 		var defaults = {
-			cityName : '浙江省|杭州市|滨江区',	//默认 城市名
-			cityCode : '12|965|971',			//默认 城市代码
-			p : '',					//方法传参 默认空
-			closeBoo : false, 		//是否出现关闭按钮 默认false
-			callback : null			//回调方法 默认null
+			cityName : '浙江省|杭州市|滨江区',
+			cityCode : '12|965|971',
+			p : '',
+			closeBoo : false,
+			callback : null
 		},
 
 		options = $.extend(defaults, options),
