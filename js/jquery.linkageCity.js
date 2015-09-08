@@ -22,13 +22,13 @@
     $.fn.linkageCity = function(options){
 
         var defaults = {
-            startTxt : '请选择地址',
-            cityName : '浙江省|杭州市|滨江区',
-            cityCode : '12|965|971',
-            p : '',
-            closeBoo : false,
-            callback : null
-        },
+                startTxt : '请选择地址',
+                cityName : '浙江省|杭州市|滨江区',
+                cityCode : '12|965|971',
+                p : '',
+                closeBoo : false,
+                callback : null
+            },
 
             options = $.extend(defaults, options),
 
@@ -271,11 +271,12 @@
                         $.each(_t.cityList,function(i,k){
                             if(k.name){
                                 code += k.code + '|';
-                                name += k.name + '&nbsp;';
+                                name += k.name + ' ';
                             };
                         });
                         code = code.slice(0,code.length-1);
-                        objs.txt.html(name).attr('data-code',code);
+                       
+                        objs.txt.html(name).attr({'data-code': code, 'data-name':name});
                         objs.ct.hide();
                         if(options.callback){
                             options.callback();
