@@ -3,11 +3,12 @@
  * @data    2015.08.06
  * @author  wuhaijing
  * @mail    1004609378@qq.com
- * @version V1.0.0
+ * @version V1.1.0 - 增加默认提示，优化样式
  */
 /********************* 传参说明 *********************/
 /**
  * 以下均为必填参数
+ * startTxt : string        //默认显示文字    默认，请选择地址
  * cityName : string		//城市名		默认'浙江省|杭州市|滨江区'
  * cityCode : string		//城市代码	默认'12|965|971'
  *
@@ -18,272 +19,274 @@
  */
 /******************** 开始 ********************/
 (function($){
-	$.fn.linkageCity = function(options){
-
-		var defaults = {
-			cityName : '浙江省|杭州市|滨江区',
-			cityCode : '12|965|971',
-			p : '',
-			closeBoo : false,
-			callback : null
-		},
-
-		options = $.extend(defaults, options),
-
-		objs = {
-			'bar' : $('<div>').addClass('m_linkage'),
-			'txt' : $('<span>').addClass('linkage_txt'),
-			'th' : $('<ul>').addClass('linkage_th'),
-			'ct' : $('<div>').addClass('linkage_content'),
-			'tb' : $('<div>').addClass('linkage_tb'),
-			'province' : $('<ul>').addClass('linkage_province').attr('data-link', '0'),
-			'city' : $('<ul>').addClass('linkage_city').attr('data-link', '1'),
-			'area' : $('<ul>').addClass('linkage_area').attr('data-link', '2'),
-			'close' : $('<a href=\"javascript:;\">').addClass('ic_linkageCity_close')
-		},
-
-		domName = this,
-
-		dfunc = {
+    $.fn.linkageCity = function(options){
+
+        var defaults = {
+            startTxt : '请选择地址',
+            cityName : '浙江省|杭州市|滨江区',
+            cityCode : '12|965|971',
+            p : '',
+            closeBoo : false,
+            callback : null
+        },
 
-			init : function(){
+            options = $.extend(defaults, options),
 
-				var _t = this;
+            objs = {
+                'bar' : $('<div>').addClass('m_linkage'),
+                'txt' : $('<span>').addClass('linkage_txt'),
+                'th' : $('<ul>').addClass('linkage_th'),
+                'ct' : $('<div>').addClass('linkage_content'),
+                'tb' : $('<div>').addClass('linkage_tb'),
+                'province' : $('<ul>').addClass('linkage_province').attr('data-link', '0'),
+                'city' : $('<ul>').addClass('linkage_city').attr('data-link', '1'),
+                'area' : $('<ul>').addClass('linkage_area').attr('data-link', '2'),
+                'close' : $('<a href=\"javascript:;\">').addClass('ic_linkageCity_close')
+            },
 
-				_t.M.getHtml();
-				_t.C.even();
-			},
+            domName = this,
 
-			//model
-			M : {
+            dfunc = {
 
-				getHtml : function(){
+                init : function(){
 
-					var _t = this,
-						cnArr = options.cityName.split('|'),
-						ccArr = options.cityCode.split('|'),
-						th = _t.getTh(cnArr,ccArr),
-						province = _t.getTb(districtData),
-						city = _t.getTb(districtData[ccArr[0]].cell),
-						area = _t.getTb(districtData[ccArr[0]].cell[ccArr[1]].cell);
-						
-					//组合默认txt
-					objs.txt.html(th[0]).attr('data-code',options.cityCode);
+                    var _t = this;
 
-					//组合默认title
-					objs.th.html(th[1]);
+                    _t.M.getHtml();
+                    _t.C.even();
+                },
 
-					//组合默认tb
-					objs.tb.append(objs.province.html(province));
-					objs.tb.append(objs.city.html(city));
-					objs.tb.append(objs.area.html(area));
+                //model
+                M : {
 
-					//组合全部省市
-					if(options.closeBoo == true){
-						objs.ct.append(objs.close);
-					};
-					objs.ct.append(objs.th);
-					objs.ct.append(objs.tb);
+                    getHtml : function(){
 
-					//组合省市
-					objs.bar.append(objs.txt);	
-					objs.bar.append(objs.ct);	
+                        var _t = this,
+                            cnArr = options.cityName.split('|'),
+                            ccArr = options.cityCode.split('|'),
+                            th = _t.getTh(cnArr,ccArr),
+                            province = _t.getTb(districtData),
+                            city = _t.getTb(districtData[ccArr[0]].cell),
+                            area = _t.getTb(districtData[ccArr[0]].cell[ccArr[1]].cell);
 
-					//放入html
-					domName.append(objs.bar);
+                        //组合默认txt
+                        objs.txt.html(options.startTxt).attr('data-code',options.cityCode);
 
-				},
+                        //组合默认title
+                        objs.th.html(th[1]);
 
-				//默认txt + title
-				getTh : function(cnArr,ccArr){	
+                        //组合默认tb
+                        objs.tb.append(objs.province.html(province));
+                        objs.tb.append(objs.city.html(city));
+                        objs.tb.append(objs.area.html(area));
 
-					var len = cnArr.length,
-						i = 0,
-						txtHtml = '', titleHtml = '',
-						arr = [];
+                        //组合全部省市
+                        if(options.closeBoo == true){
+                            objs.ct.append(objs.close);
+                        };
+                        objs.ct.append(objs.th);
+                        objs.ct.append(objs.tb);
 
-					for( ; i < len; i++){
-						txtHtml += cnArr[i] + '&nbsp;';
-						titleHtml += '<li data-code=\"' + ccArr[i] + '\" data-link=\"' + i + '\">' + cnArr[i] + '</li>';
-					};
+                        //组合省市
+                        objs.bar.append(objs.txt);
+                        objs.bar.append(objs.ct);
 
-					arr = [txtHtml,titleHtml];
-					return arr;
-				},
+                        //放入html
+                        domName.append(objs.bar);
 
-				getTb : function(list){
-					
-					var html = '';
+                    },
 
-					$.each(list, function(i, key){
-						html += '<li data-code=\"' + i + '\">' + key.name + '</li>'
-					});
+                    //默认txt + title
+                    getTh : function(cnArr,ccArr){
 
-					return html;
-				}
-			},
+                        var len = cnArr.length,
+                            i = 0,
+                            txtHtml = '', titleHtml = '',
+                            arr = [];
 
-			//controller
-			C : {
+                        for( ; i < len; i++){
+                            txtHtml += cnArr[i] + '&nbsp;';
+                            titleHtml += '<li data-code=\"' + ccArr[i] + '\" data-link=\"' + i + '\">' + cnArr[i] + '</li>';
+                        };
 
-				cityList : {"province":{}, "city":{}, "area":{}},
+                        arr = [txtHtml,titleHtml];
+                        return arr;
+                    },
 
-				even : function(){
+                    getTb : function(list){
 
-					var _t = this;
-					
-					//鼠标进入 出现ct
-					objs.txt.mouseenter(function(){
-						objs.txt.css({"border-bottom-color":"#fff"});
+                        var html = '';
 
-						//默认点开选择第一个
-						objs.th.find('li:eq(0)').addClass('crt').siblings().removeClass('crt');
-						objs.province.css('display','block').siblings().hide();
+                        $.each(list, function(i, key){
+                            html += '<li data-code=\"' + i + '\">' + key.name + '</li>'
+                        });
 
-						objs.ct.show();
+                        return html;
+                    }
+                },
 
-						return false;
-					});
+                //controller
+                C : {
 
+                    firstOpen : 1, //是否第一次打开， 1 = 是; 2 = 否
 
-					//点击title选择省市
-					objs.th.find('li').click(function(){
-						$(this).addClass('crt').siblings().removeClass('crt');
+                    cityList : {"province":{}, "city":{}, "area":{}},
 
-						var linkName = $(this).attr('data-link');
-						objs.tb.find('ul[data-link=\"' + linkName + '\"]').show().siblings().hide();
+                    even : function(){
 
-						return false;
-					});
+                        var _t = this;
 
+                        //鼠标进入 出现ct
+                        objs.txt.click(function(){
+                            $(".linkage_content").hide().css("z-index","1");
 
-					//close
-					objs.close.click(function(){
-						objs.ct.hide();
-						objs.txt.css({'border-bottom-color':'#ccc'});
+                            //默认点开选择第一个
+                            if(_t.firstOpen == 1){
+                                objs.th.find('li:eq(0)').html("请选择省").show().siblings().hide();
+                                _t.firstOpen = 0;
+                            };
+                            objs.th.find('li:eq(0)').addClass('crt').siblings().removeClass('crt');
+                            objs.province.css('display','block').siblings().hide();
 
-						return false;
-					});
+                            objs.ct.css("z-index","9").show();
 
-					objs.province.delegate('li', 'click', function(){
-						_t.cityChange('0',$(this));
+                            return false;
+                        });
 
-						return false;
-					});
 
-					objs.city.delegate('li', 'click', function(){
-						_t.cityChange('1',$(this));
+                        //点击title选择省市
+                        objs.th.find('li').click(function(){
+                            $(this).addClass('crt').siblings().removeClass('crt');
 
-						return false;
-					});
+                            var linkName = $(this).attr('data-link');
+                            objs.tb.find('ul[data-link=\"' + linkName + '\"]').show().siblings().hide();
 
-					objs.area.delegate('li', 'click', function(){
-						_t.cityChange('2',$(this));
+                            return false;
+                        });
 
-						return false;
-					});
 
-					$("body").click(function(){
-						objs.txt.css({'border-bottom-color':'#ccc'});
-						objs.ct.hide();
-					});
+                        //close
+                        objs.close.click(function(){
+                            objs.ct.hide();
 
-				},
+                            return false;
+                        });
 
-				cityChange : function(status, dom){	
+                        objs.province.delegate('li', 'click', function(){
+                            _t.cityChange('0',$(this));
 
-					var _t = this,
-						name = dom.html(),
-						code = dom.attr('data-code');
+                            return false;
+                        });
 
-					objs.th.find('li[data-link=\"' + status + '\"]').html(name).attr('data-code',code);
+                        objs.city.delegate('li', 'click', function(){
+                            _t.cityChange('1',$(this));
 
-					//province
-					if(status == '0'){
-						_t.cityList.province.code = code;
-						_t.cityList.province.name = name;
+                            return false;
+                        });
 
-						var province = districtData[_t.cityList.province.code].cell;
+                        objs.area.delegate('li', 'click', function(){
+                            _t.cityChange('2',$(this));
 
-						_t.cityJudge(status, province, 'city');
+                            return false;
+                        });
 
-					};
+                        $("body").click(function(){
+                            objs.ct.hide();
+                        });
 
-					//city
-					if(status == '1'){
+                    },
 
-						_t.cityList.city.code = code;
-						_t.cityList.city.name = name;
+                    cityChange : function(status, dom){
 
-						var area = districtData[_t.cityList.province.code].cell[code].cell;
-						
-						_t.cityJudge(status, area, 'area');
+                        var _t = this,
+                            name = dom.html(),
+                            code = dom.attr('data-code');
 
-					};
+                        objs.th.find('li[data-link=\"' + status + '\"]').html(name).attr('data-code',code);
 
-					//area
-					if(status == '2'){
-						_t.cityList.area.code = code;
-						_t.cityList.area.name = name;
+                        //province
+                        if(status == '0'){
+                            _t.cityList.province.code = code;
+                            _t.cityList.province.name = name;
 
-						_t.cityHide();
-						return false;
-					};
+                            var province = districtData[_t.cityList.province.code].cell;
 
-					$(objs.th).find('li[data-link=\"' + status + '\"]').next()
-						.html('请选择').attr('data-code','')
-						.addClass('crt').siblings().removeClass('crt');
-					
-					$(objs.tb).find('ul[data-link=\"' + status + '\"]').next().show().siblings().hide();
+                            _t.cityJudge(status, province, 'city');
 
-				},
+                        };
 
-				cityJudge : function(status, cellBoo, name){	//cellBoo列表是否存在 name = province/city/area
+                        //city
+                        if(status == '1'){
 
-					var _t = this;
+                            _t.cityList.city.code = code;
+                            _t.cityList.city.name = name;
 
-					if(cellBoo){
+                            var area = districtData[_t.cityList.province.code].cell[code].cell;
 
-						objs.th.find('li[data-link=\"' + status + '\"]').next().show();
-						objs[name].html(dfunc.M.getTb(cellBoo));
+                            _t.cityJudge(status, area, 'area');
 
-					} else{
+                        };
 
-						_t.cityList[name] = {};
+                        //area
+                        if(status == '2'){
+                            _t.cityList.area.code = code;
+                            _t.cityList.area.name = name;
 
-						objs.th.find('li[data-link=\"' + status + '\"]').next().hide();
-						_t.cityHide();
-						return false;
-					};
+                            _t.cityHide();
+                            return false;
+                        };
 
-				},
+                        objs.th.find('li[data-link=\"' + status + '\"]').next()
+                            .html('请选择').attr('data-code','')
+                            .addClass('crt').siblings().removeClass('crt');
 
-				cityHide : function(){
+                        objs.tb.find('ul[data-link=\"' + status + '\"]').next().show().siblings().hide();
 
-					var _t = this,name = '', code = '';
+                    },
 
+                    cityJudge : function(status, cellBoo, name){	//cellBoo列表是否存在 name = province/city/area
 
-					$.each(_t.cityList,function(i,k){
-						if(k.name){
-							code += k.code + '|';
-							name += k.name + '&nbsp;';
-						};						
-					});
+                        var _t = this;
 
-					code = code.slice(0,code.length-1);
+                        if(cellBoo){
 
-					objs.txt.html(name).attr('data-code',code).css({'border-bottom-color':'#ccc'});
-					objs.ct.hide();
-					if(options.callback){
-						options.callback();	
-					};
-				}
+                            objs.th.find('li[data-link=\"' + status + '\"]').next().show();
+                            objs[name].html(dfunc.M.getTb(cellBoo));
 
-			}
-		};
+                        } else{
 
-		dfunc.init(options,objs);
+                            _t.cityList[name] = {};
 
-	};
+                            objs.th.find('li[data-link=\"' + status + '\"]').next().hide();
+                            _t.cityHide();
+                            return false;
+                        };
+
+                    },
+
+                    cityHide : function(){
+
+                        var _t = this,name = '', code = '';
+
+                        $.each(_t.cityList,function(i,k){
+                            if(k.name){
+                                code += k.code + '|';
+                                name += k.name + '&nbsp;';
+                            };
+                        });
+                        code = code.slice(0,code.length-1);
+                        objs.txt.html(name).attr('data-code',code);
+                        objs.ct.hide();
+                        if(options.callback){
+                            options.callback();
+                        };
+                    }
+
+                }
+            };
+
+        dfunc.init(options,objs);
+
+    };
 
 })(jQuery);
