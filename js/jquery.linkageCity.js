@@ -3,7 +3,7 @@
  * @data    2015.08.06
  * @author  wuhaijing
  * @mail    1004609378@qq.com
- * @version V1.1.0 - 增加默认提示，优化样式
+ * @version V1.1.1 - 增加父分类-中国/国外
  */
 /********************* 传参说明 *********************/
 /**
@@ -13,12 +13,13 @@
  * cityCode : string		//城市代码	默认'12|965|971'
  *
  * 以下均为可选参数
+ * country : boolean   //是否需要出现选择国家    默认是
  * p : string			//方法传参			默认空
  * closeBoo ：boolean	//是否出现关闭按钮 	默认false
  * call ：function		//回调方法			默认null
  */
 /******************** 开始 ********************/
-(function($){
+(function($) {
     $.fn.linkageCity = function(options){
 
         var defaults = {
@@ -26,6 +27,7 @@
                 cityName : '浙江省|杭州市|滨江区',
                 cityCode : '12|965|971',
                 p : '',
+                country : true,
                 closeBoo : false,
                 callback : null
             },
@@ -33,7 +35,9 @@
             options = $.extend(defaults, options),
 
             objs = {
-                'bar' : $('<div>').addClass('m_linkage'),
+                'country' : $('<div>').addClass('m_linkage m_linkageCountry').html("<span class=\"linkage_txt\" data-name=\"中国\">中国</span>"),
+                'countryCt' : $('<div>').addClass('linkage_content').html("<div class=\"linkage_tb\"><ul><li>中国</li><li>其他国家</li></ul></div>"),
+                'bar' : $('<div>').addClass('m_linkage m_linkageCity'),
                 'txt' : $('<span>').addClass('linkage_txt'),
                 'th' : $('<ul>').addClass('linkage_th'),
                 'ct' : $('<div>').addClass('linkage_content'),
@@ -68,6 +72,12 @@
                             province = _t.getTb(districtData),
                             city = _t.getTb(districtData[ccArr[0]].cell),
                             area = _t.getTb(districtData[ccArr[0]].cell[ccArr[1]].cell);
+
+                        //是否存在国家
+                        if(options.country){
+                            objs.country.append(objs.countryCt);
+                            domName.append(objs.country).addClass("m_linkageAll");
+                        };
 
                         //组合默认txt
                         objs.txt.html(options.startTxt).attr('data-code',options.cityCode);
@@ -136,6 +146,26 @@
 
                         var _t = this;
 
+                        //如果存在国家
+                        objs.country.click(function(){
+                            objs.countryCt.show();
+                            objs.ct.hide();
+                            return false;
+                        });
+                        objs.countryCt.find("li").click(function(){
+                            var name = $(this).text();
+                            objs.country.find("span").html(name).attr("data-name",name);
+
+                            if(name === "中国"){
+                                objs.bar.show();
+                                objs.txt.click();
+                            } else {
+                                objs.bar.hide();
+                            };
+                            objs.countryCt.hide();
+                            return false;
+                        });
+
                         //鼠标进入 出现ct
                         objs.txt.click(function(){
                             $(".linkage_content").hide().css("z-index","1");
@@ -192,6 +222,7 @@
 
                         $("body").click(function(){
                             objs.ct.hide();
+                            objs.countryCt.hide();
                         });
 
                     },
@@ -244,7 +275,7 @@
 
                     },
 
-                    cityJudge : function(status, cellBoo, name){	//cellBoo列表是否存在 name = province/city/area
+                    cityJudge : function(status, cellBoo, name){    //cellBoo列表是否存在 name = province/city/area
 
                         var _t = this;
 
@@ -266,17 +297,18 @@
 
                     cityHide : function(){
 
-                        var _t = this,name = '', code = '';
+                        var _t = this,name = '', code = '', dataName = '';
 
                         $.each(_t.cityList,function(i,k){
                             if(k.name){
                                 code += k.code + '|';
                                 name += k.name + ' ';
+                                dataName += k.name;
                             };
                         });
                         code = code.slice(0,code.length-1);
-                       
-                        objs.txt.html(name).attr({'data-code': code, 'data-name':name});
+
+                        objs.txt.html(name).attr({'data-code': code, 'data-name':dataName});
                         objs.ct.hide();
                         if(options.callback){
                             options.callback();
