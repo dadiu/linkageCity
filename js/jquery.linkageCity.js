@@ -35,7 +35,7 @@
             options = $.extend(defaults, options),
 
             objs = {
-                'country' : $('<div>').addClass('m_linkage m_linkageCountry').html("<span class=\"linkage_txt\" data-name=\"中国\">中国</span>"),
+                'country' : $('<div>').addClass('m_linkage m_linkageCountry').attr("data-name","中国").html("<span class=\"linkage_txt\">中国</span>"),
                 'countryCt' : $('<div>').addClass('linkage_content').html("<div class=\"linkage_tb\"><ul><li>中国</li><li>其他国家</li></ul></div>"),
                 'bar' : $('<div>').addClass('m_linkage m_linkageCity'),
                 'txt' : $('<span>').addClass('linkage_txt'),
@@ -80,7 +80,7 @@
                         };
 
                         //组合默认txt
-                        objs.txt.html(options.startTxt).attr('data-code',options.cityCode);
+                        objs.txt.html(options.startTxt);
 
                         //组合默认title
                         objs.th.html(th[1]);
@@ -100,6 +100,7 @@
                         //组合省市
                         objs.bar.append(objs.txt);
                         objs.bar.append(objs.ct);
+                        objs.bar.attr('data-code',options.cityCode);
 
                         //放入html
                         domName.append(objs.bar);
@@ -148,14 +149,17 @@
 
                         //如果存在国家
                         objs.country.click(function(){
-                            objs.countryCt.show();
+                            
+                            $(".linkage_content").hide().css("z-index","1");
+                            objs.countryCt.css("z-index","9").show();
                             objs.ct.hide();
                             return false;
                         });
                         objs.countryCt.find("li").click(function(){
                             var name = $(this).text();
-                            objs.country.find("span").html(name).attr("data-name",name);
 
+                            objs.country.find("span").html(name);
+                            objs.country.attr("data-name",name);
                             if(name === "中国"){
                                 objs.bar.show();
                                 objs.txt.click();
@@ -198,7 +202,6 @@
                         //close
                         objs.close.click(function(){
                             objs.ct.hide();
-
                             return false;
                         });
 
@@ -303,12 +306,14 @@
                             if(k.name){
                                 code += k.code + '|';
                                 name += k.name + ' ';
-                                dataName += k.name;
+                                dataName += k.name + '|';
                             };
                         });
                         code = code.slice(0,code.length-1);
+                        dataName = dataName.slice(0,dataName.length-1);
 
-                        objs.txt.html(name).attr({'data-code': code, 'data-name':dataName});
+                        objs.txt.html(name);
+                        objs.bar.attr({'data-code': code, 'data-name':dataName});
                         objs.ct.hide();
                         if(options.callback){
                             options.callback();
